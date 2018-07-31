@@ -43,7 +43,24 @@ const StartIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'StartIntent';
     },
     handle(handlerInput) {
-        const speechText = 'In the news today we have: .......... Trump, Russian Secret Spilling Site and California Wildfires, What would you like to know more about?';
+        const speechText = 'In the news today we have: Trump, Russian Secret Spilling Site and California Wildfires. What would you like to know more about?';
+
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt("What would you like to know more about")
+            .withSimpleCard('News', speechText)
+            .getResponse();
+    }
+};
+
+const SelectIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'SelectIntent';
+    },
+    handle(handlerInput) {
+        const newsTitle = handlerInput.requestEnvelope.request.intent.slots.newsTitle;
+        const speechText = 'In the news today we have: Trump, Russian Secret Spilling Site and California Wildfires. What would you like to know more about?';
 
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -130,6 +147,7 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(LaunchRequestHandler,
         StartIntentHandler,
+        SelectIntentHandler,
         HelloIntentHandler,
         HelloWorldIntentHandler,
         HelpIntentHandler,
