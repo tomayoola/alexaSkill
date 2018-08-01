@@ -9,7 +9,7 @@ const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         const attributesManager = handlerInput.attributesManager;
         const responseBuilder = handlerInput.responseBuilder;
 
@@ -173,6 +173,6 @@ exports.handler = Alexa.SkillBuilders.custom()
         SessionEndedRequestHandler
     )
     .addErrorHandlers(ErrorHandler)
-    .withTableName('Interactive-News')
+    .withTableName('interact')
     .withAutoCreateTable(true)
     .lambda();
