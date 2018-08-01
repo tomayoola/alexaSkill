@@ -5,33 +5,28 @@ const Alexa = require('ask-sdk-core');
 
 // Code for the handlers here
 
-
-
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
+        const attributesManager = handlerInput.attributesManager;
+        const responseBuilder = handlerInput.responseBuilder;
+
+        const attributes = await attributesManager.getPersistentAttributes() || {};
+        if (Object.keys(attributes).length === 0) {
+          attributes.prevIntent = '';
+          attributes.prevSlotName = '';
+          attributes.prevSlotValue = '';
+        }
+
+        attributesManager.setSessionAttributes(attributes);
+
         const speechText = 'Welcome to news feed.';
 
-        return handlerInput.responseBuilder
+        return responseBuilder
             .speak(speechText)
             .reprompt(speechText)
-            .withSimpleCard('Hello World', speechText)
-            .getResponse();
-    }
-};
-
-const HelloWorldIntentHandler = {
-    canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
-    },
-    handle(handlerInput) {
-        const speechText = 'Hello World!';
-
-        return handlerInput.responseBuilder
-            .speak(speechText)
             .withSimpleCard('Hello World', speechText)
             .getResponse();
     }
@@ -43,9 +38,15 @@ const StartIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'StartIntent';
     },
     handle(handlerInput) {
+        const attributesManager = handlerInput.attributesManager;
+        const responseBuilder = handlerInput.responseBuilder;
+        const sessionAttributes = attributesManager.getSessionAttributes();
+
+        sessionAttributes.prevIntent = 'StartIntent';
+
         const speechText = 'In the news today we have: Trump, Russian Secret Spilling Site and California Wildfires. What would you like to know more about?';
 
-        return handlerInput.responseBuilder
+        return responseBuilder
             .speak(speechText)
             .reprompt("What would you like to know more about")
             .withSimpleCard('News', speechText)
@@ -60,6 +61,8 @@ const SelectIntentHandler = {
     },
     handle(handlerInput) {
         const newsTitle = handlerInput.requestEnvelope.request.intent.slots.newsTitle;
+        const newsTitleValue = newsTitle.value;
+        // newsTitleValue are news titles
         const speechText = 'In the news today we have: Trump, Russian Secret Spilling Site and California Wildfires. What would you like to know more about?';
 
         return handlerInput.responseBuilder
@@ -70,10 +73,25 @@ const SelectIntentHandler = {
     }
 };
 
-const HelloIntentHandler = {
+const PreviousIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'HelloIntent';
+            && handlerInput.requestEnvelope.request.intent.name === 'PreviousIntent';
+    },
+    handle(handlerInput) {
+        const speechText = 'Hello World!';
+
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .withSimpleCard('Hello World', speechText)
+            .getResponse();
+    }
+};
+
+const NextIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'NextIntent';
     },
     handle(handlerInput) {
         const speechText = 'Hello World!';
@@ -148,9 +166,13 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(LaunchRequestHandler,
         StartIntentHandler,
         SelectIntentHandler,
-        HelloIntentHandler,
-        HelloWorldIntentHandler,
+        PreviousIntentHandler,
+        NextIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
-        SessionEndedRequestHandler)
+        SessionEndedRequestHandler
+    )
+    .addErrorHandlers(ErrorHandler)
+    .withTableName('Interactive-News')
+    .withAutoCreateTable(true)
     .lambda();
