@@ -121,6 +121,7 @@ const SelectIntentHandler = {
                 sessionAttributes.story1Pos = 4;
             } else {
                 responseText = 'There are no stories left about Donald Trump. What more would you like to hear about';
+                sessionAttributes.story1Pos = 5;
             }
         } else if (TITLE_TWO.indexOf(newsTitleValue) !== -1) {
             if (sessionAttributes.story2Pos === 1) {
@@ -165,9 +166,14 @@ const PreviousIntentHandler = {
             if (sessionAttributes.story1Pos === 2) {
                 responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
             } else if (sessionAttributes.story1Pos === 3) {
-                responseText = 'The second story about Trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump.';
+                responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
+                sessionAttributes.story1Pos = 2;
             } else if ((sessionAttributes.story1Pos === 4)) {
+                responseText = 'The second story about Trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump.';
+                sessionAttributes.story1Pos = 3;
+            } else {
                 responseText = 'The final story about trump is. ' + FIRST_STORY_THREE + '. What more would you like to hear about';
+                sessionAttributes.story1Pos = 4;
             }
         } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
             responseText = 'There is one story about a Russian secret-spilling site. ' + SECOND_STORY_ONE;
@@ -208,6 +214,7 @@ const NextIntentHandler = {
                 sessionAttributes.story1Pos = 4;
             } else {
                 responseText = 'There are no stories left about Donald Trump. What more would you like to hear about';
+                sessionAttributes.story1Pos = 5;
             }
         } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
             responseText = 'There are no stories left about Russia. What more would you like to hear about.';
@@ -237,9 +244,9 @@ const ElaborateIntentHandler = {
         const responseText = '';
 
         const newsEntity = request.intent.slots.newsEntities;
-        const newsEntity = newsTitle.value;
+        const newsEntityValue = newsEntity.value;
 
-        if (TITLE_ONE.indexOf(prevValue) !== -1) {
+        if (ENTITY_ONE_ONE.indexOf(newsEntityValue) !== -1) {
             if (sessionAttributes.story1Pos === 2) {
                 responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump';
                 sessionAttributes.story1Pos = 3;
@@ -249,10 +256,14 @@ const ElaborateIntentHandler = {
             } else {
                 responseText = 'There are no stories left about Donald Trump. What more would you like to hear about';
             }
-        } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
+        } else if (ENTITY_ONE_TWO.indexOf(newsEntityValue) !== -1) {
             responseText = 'There are no stories left about Russia. What more would you like to hear about.';
-        } else if (TITLE_THREE.indexOf(prevValue) !== -1) {
+        } else if (ENTITY_ONE_THREE.indexOf(newsEntityValue) !== -1) {
             responseText = 'There are no stories left about Wildfires in California. What more would you like to hear about.';
+        } else if (ENTITY_TWO_ONE.indexOf(newsEntityValue) !== -1) {
+
+        } else if (ENTITY_THREE_ONE.indexOf(newsEntityValue) !== -1) {
+
         }
 
         return responseBuilder
