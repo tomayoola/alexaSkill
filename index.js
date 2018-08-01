@@ -154,11 +154,39 @@ const PreviousIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'PreviousIntent';
     },
     handle(handlerInput) {
-        const speechText = 'Hello World!';
+        const request = handlerInput.requestEnvelope.request;
+        const attributesManager = handlerInput.attributesManager;
+        const responseBuilder = handlerInput.responseBuilder;
+        const sessionAttributes = attributesManager.getSessionAttributes();
 
-        return handlerInput.responseBuilder
-            .speak(speechText)
-            .withSimpleCard('Hello World', speechText)
+        let responseText = '';
+
+        let prevValue = sessionAttributes.prevSlotValue;
+
+        if (TITLE_ONE.indexOf(prevValue) !== -1) {
+            if (sessionAttributes.story1Pos === 1) {
+                responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
+            } else if (sessionAttributes.story1Pos === 2) {
+                responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
+                sessionAttributes.story1Pos = 1;
+            } else if ((sessionAttributes.story1Pos === 3)) {
+                responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump';
+                sessionAttributes.story1Pos = 2;
+            } else {
+                responseText = 'The final story about trump is. ' + FIRST_STORY_THREE + '. What more would you like to hear about';
+                sessionAttributes.story1Pos = 4;
+            }
+        } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
+            responseText = 'There is one story about a Russian secret-spilling site. ' + SECOND_STORY_ONE;
+            sessionAttributes.story2Pos = 2;
+        } else if (TITLE_THREE.indexOf(prevValue) !== -1) {
+            responseText = 'There is one story about Wildfires in California. ' + THIRD_STORY_ONE;
+            sessionAttributes.story3Pos = 2;
+        }
+
+        return responseBuilder
+            .speak(responseText)
+            .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
 };
@@ -174,7 +202,7 @@ const NextIntentHandler = {
         const responseBuilder = handlerInput.responseBuilder;
         const sessionAttributes = attributesManager.getSessionAttributes();
 
-        let responseText;
+        let responseText = '';
 
         let prevValue = sessionAttributes.prevSlotValue;
 
@@ -194,10 +222,10 @@ const NextIntentHandler = {
             responseText = 'There are no stories left about Wildfires in California. What more would you like to hear about.';
         }
 
-        return handlerInput.responseBuilder
+        return responseBuilder
             .speak(responseText)
             .reprompt("What would you like to know more about")
-            .withSimpleCard('Hello World', "hello")
+            .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
 };
@@ -282,6 +310,7 @@ exports.handler = Alexa.SkillBuilders.standard()
         SelectIntentHandler,
         PreviousIntentHandler,
         NextIntentHandler,
+        ElaborateIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler
