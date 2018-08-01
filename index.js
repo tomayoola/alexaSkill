@@ -95,7 +95,6 @@ const SelectIntentHandler = {
         const responseBuilder = handlerInput.responseBuilder;
         const sessionAttributes = attributesManager.getSessionAttributes();
 
-
         let prevIntent = sessionAttributes.prevIntent;
         let prevSlotName = sessionAttributes.prevSlotName;
         let prevValue = sessionAttributes.prevSlotValue;
@@ -154,7 +153,6 @@ const PreviousIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'PreviousIntent';
     },
     handle(handlerInput) {
-        const request = handlerInput.requestEnvelope.request;
         const attributesManager = handlerInput.attributesManager;
         const responseBuilder = handlerInput.responseBuilder;
         const sessionAttributes = attributesManager.getSessionAttributes();
@@ -168,13 +166,10 @@ const PreviousIntentHandler = {
                 responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
             } else if (sessionAttributes.story1Pos === 2) {
                 responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
-                sessionAttributes.story1Pos = 1;
             } else if ((sessionAttributes.story1Pos === 3)) {
                 responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump';
-                sessionAttributes.story1Pos = 2;
             } else {
                 responseText = 'The final story about trump is. ' + FIRST_STORY_THREE + '. What more would you like to hear about';
-                sessionAttributes.story1Pos = 4;
             }
         } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
             responseText = 'There is one story about a Russian secret-spilling site. ' + SECOND_STORY_ONE;
@@ -186,6 +181,7 @@ const PreviousIntentHandler = {
 
         return responseBuilder
             .speak(responseText)
+            .reprompt("What would you like to know more about")
             .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
@@ -197,7 +193,6 @@ const NextIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'NextIntent';
     },
     handle(handlerInput) {
-        const request = handlerInput.requestEnvelope.request;
         const attributesManager = handlerInput.attributesManager;
         const responseBuilder = handlerInput.responseBuilder;
         const sessionAttributes = attributesManager.getSessionAttributes();
@@ -236,11 +231,16 @@ const ElaborateIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'ElaborateIntent';
     },
     handle(handlerInput) {
-        const speechText = 'Hello World!';
+        const request = handlerInput.requestEnvelope.request;
+        const attributesManager = handlerInput.attributesManager;
+        const responseBuilder = handlerInput.responseBuilder;
+        const sessionAttributes = attributesManager.getSessionAttributes();
 
-        return handlerInput.responseBuilder
+        const responseText = 'Hello World!';
+
+        return responseBuilder
             .speak(speechText)
-            .withSimpleCard('Hello World', speechText)
+            .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
 };
