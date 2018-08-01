@@ -7,9 +7,9 @@ aws.config.update({
     region: 'us-east-1'
 });
 
-const TITLE_ONE = 'Trump';
-const TITLE_TWO = 'Russian secret-spilling site';
-const TITLE_THREE = 'Wildfires California';
+const TITLE_ONE = ['Trump', 'Donald Trump'];
+const TITLE_TWO = ['Russian secret-spilling site', 'Russian secret spilling site', 'Russian secret spill site'];
+const TITLE_THREE = ['Wildfires California', 'Wildfire California', 'Wildfire in California', 'Wildfires in California'];
 
 const FIRST_STORY_ONE = 'President Donald Trump tweeted on Tuesday he is consulting with the National Rifle Association over whether it makes sense for a Texas company to publish downloadable blueprints for a 3D-printed gun. Trump spoke after eight states filed suit against the administration, contending the hard-to-trace plastic weapons that fire real bullets are a boon to terrorists and criminals and threaten public safety. The suit, filed Monday in Seattle, asks a judge to block the federal government’s late-June settlement with Defense Distributed, which allowed the company to make the plans available online.';
 const FIRST_STORY_TWO = 'Mr Trump said he could meet President Hassan Rouhani with "no preconditions" at "any time", after the two traded hostile threats earlier this month. Iranian state media quoted politicians as saying such talks would have "no value" and be "a humiliation". In May, the US abandoned a deal which curbed Iran\'s nuclear activities in return for the lifting of sanctions. The US is deeply suspicious of Iranian activity in the Middle East and is an ally of Israel and Saudi Arabia, two of Iran\s foes.';
