@@ -1,7 +1,13 @@
 'use strict';
 
-const Alexa = require('ask-sdk-core');
+const Alexa = require('ask-sdk');
 // use 'ask-sdk' if standard SDK module is installed
+
+const aws =  require('aws-sdk');
+
+aws.config.update({
+    region: 'us-east-1'
+});
 
 // Code for the handlers here
 
@@ -63,7 +69,7 @@ const SelectIntentHandler = {
         const newsTitle = handlerInput.requestEnvelope.request.intent.slots.newsTitle;
         const newsTitleValue = newsTitle.value;
         // newsTitleValue are news titles
-        const speechText = 'In the news today we have: Trump, Russian Secret Spilling Site and California Wildfires. What would you like to know more about?';
+        const speechText = 'Ok here is news about ' + newsTitleValue;
 
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -162,7 +168,7 @@ const ErrorHandler = {
     },
 };
 
-exports.handler = Alexa.SkillBuilders.custom()
+exports.handler = Alexa.SkillBuilders.standard()
     .addRequestHandlers(LaunchRequestHandler,
         StartIntentHandler,
         SelectIntentHandler,
@@ -173,6 +179,9 @@ exports.handler = Alexa.SkillBuilders.custom()
         SessionEndedRequestHandler
     )
     .addErrorHandlers(ErrorHandler)
-    .withTableName('interact')
+    .withTableName('interact2')
     .withAutoCreateTable(true)
+    .withDynamoDbClient(
+        new aws.DynamoDB({ apiVersion: "latest", region: "us-east-1" })
+    )
     .lambda();
