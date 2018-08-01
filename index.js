@@ -165,9 +165,9 @@ const PreviousIntentHandler = {
             if (sessionAttributes.story1Pos === 2) {
                 responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
             } else if (sessionAttributes.story1Pos === 3) {
-                responseText = 'The first story about Trump is. ' + FIRST_STORY_ONE + '. Say next to hear the second story about Trump.';
+                responseText = 'The second story about Trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump.';
             } else if ((sessionAttributes.story1Pos === 4)) {
-                responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump';
+                responseText = 'The final story about trump is. ' + FIRST_STORY_THREE + '. What more would you like to hear about';
             }
         } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
             responseText = 'There is one story about a Russian secret-spilling site. ' + SECOND_STORY_ONE;
@@ -236,8 +236,8 @@ const ElaborateIntentHandler = {
 
         const responseText = '';
 
-        const newsTitle = request.intent.slots.newsTitle;
-        const newsTitleValue = newsTitle.value;
+        const newsEntity = request.intent.slots.newsEntities;
+        const newsEntity = newsTitle.value;
 
         if (TITLE_ONE.indexOf(prevValue) !== -1) {
             if (sessionAttributes.story1Pos === 2) {
