@@ -11,6 +11,11 @@ const TITLE_ONE = ['Trump', 'Donald Trump'];
 const TITLE_TWO = ['Russian secret-spilling site', 'Russian secret spilling site', 'Russian secret spill site'];
 const TITLE_THREE = ['Wildfires California', 'Wildfire California', 'Wildfire in California', 'Wildfires in California'];
 
+const ENTITY_ONE_ONE = ['National Rifle Association', 'Nation Rifle Association', 'National Rifle Associate'];
+const ENTITY_ONE_TWO = ['President Hassan Rouhani', 'Hassan Rouhani'];
+const ENTITY_ONE_THREE = ['Koch Brothers', 'Koch Brother'];
+const ENTITY_TWO_ONE = ['Russia'];
+const ENTITY_THREE_ONE = ['Lakeport', 'Lake port'];
 
 
 const FIRST_STORY_ONE = 'President Donald Trump tweeted on Tuesday he is consulting with the National Rifle Association over whether it makes sense for a Texas company to publish downloadable blueprints for a 3D-printed gun. Trump spoke after eight states filed suit against the administration, contending the hard-to-trace plastic weapons that fire real bullets are a boon to terrorists and criminals and threaten public safety. The suit, filed Monday in Seattle, asks a judge to block the federal government’s late-June settlement with Defense Distributed, which allowed the company to make the plans available online.';
@@ -120,6 +125,21 @@ const NextIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
             && handlerInput.requestEnvelope.request.intent.name === 'NextIntent';
+    },
+    handle(handlerInput) {
+        const speechText = 'Hello World!';
+
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .withSimpleCard('Hello World', speechText)
+            .getResponse();
+    }
+};
+
+const ElaborateIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'ElaborateIntent';
     },
     handle(handlerInput) {
         const speechText = 'Hello World!';
