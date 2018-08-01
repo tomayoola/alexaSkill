@@ -3,13 +3,30 @@
 const Alexa = require('ask-sdk-core');
 // use 'ask-sdk' if standard SDK module is installed
 
-// Code for the handlers here
+const TITLE_ONE = 'Trump';
+const TITLE_TWO = 'Russian secret-spilling site';
+const TITLE_THREE = 'Wildfires California';
 
+const FIRST_STORY_ONE = 'President Donald Trump tweeted on Tuesday he is consulting with the National Rifle Association over whether it makes sense for a Texas company to publish downloadable blueprints for a 3D-printed gun. Trump spoke after eight states filed suit against the administration, contending the hard-to-trace plastic weapons that fire real bullets are a boon to terrorists and criminals and threaten public safety. The suit, filed Monday in Seattle, asks a judge to block the federal government’s late-June settlement with Defense Distributed, which allowed the company to make the plans available online.';
+const FIRST_STORY_TWO = 'Mr Trump said he could meet President Hassan Rouhani with "no preconditions" at "any time", after the two traded hostile threats earlier this month. Iranian state media quoted politicians as saying such talks would have "no value" and be "a humiliation". In May, the US abandoned a deal which curbed Iran\'s nuclear activities in return for the lifting of sanctions. The US is deeply suspicious of Iranian activity in the Middle East and is an ally of Israel and Saudi Arabia, two of Iran\s foes.';
+const FIRST_STORY_THREE = 'Donald Trump has launched an extraordinary attack on the Koch brothers, accusing the Republican megadonors of opposing his government\'s agenda. \“The globalist Koch Brothers, who have become a total joke in real Republican circles, are against Strong Borders and Powerful Trade,\” the US president wrote on Twitter early on Tuesday morning. Mr Trump\’s outburst came after the Koch brothers\' political arm declared it would not help elect a Republican senate candidate in North Dakota, partly over his failure to challenge the White House\'s trade tariffs. The decision sent a strong message to Republican officials across the country unwilling to oppose the spending explosion and protectionist trade policies embraced by Mr Trump.';
+const FIRST_STORY_ONE_ENTITY = 'The National Rifle Association (NRA) is suing Seattle over a city law requiring gun owners to lock up their firearms. The lawsuit, brought by the NRA along with the Second Amendment Foundation and two city residents, was filed late last week in King County Superior Court in Washington state, which has a regulation prohibiting cities from issuing firearms regulations.';
+const FIRST_STORY_TWO_ENTITY = 'The Iranian president, considered a moderate, has previously threatened to close the strait in response to US President Donald Trump\'s threat to stop Iranian oil exports through the waterway. The strait is one of the world\'s most important maritime trade routes and connects the oil-rich Persian Gulf to the Indian Ocean.';
+const FIRST_STORY_THREE_ENTITY = 'Steve Bannon has a warning for candidates supported by the conservative Koch political donor network – just ahead of crucial midterm elections this fall. \"You take Koch money, it\'s going to be toxic. We are going to let people know that if you take Koch money there\'s a punishment,\" Bannon, former chief White House strategist and Trump campaign chief executive, told CNBC in an exclusive interview. \"If you take money from people who are against the president and are looking to put a knife in the back of the president, you are going to pay." The strategist declined to elaborate on what the punishment would look like. The Koch network traditionally backs Republican candidates, but has recently said it is open to supporting Democrats who favor the group\'s policies.';
+
+const SECOND_STORY_ONE = 'Over the past three months, a handful of highly placed Russians have discovered their secrets seeping onto the web. It happened to a Russian Interior Ministry official whose emails were published online in April. It happened again this month, when details about a former Kremlin chief of staff\'s American energy investment were exposed by Britain\'s Guardian newspaper.';
+const SECOND_STORY_ONE_ENTITY = 'Trump Can\'t Split Russia From China Yet
+When Henry Kissinger traveled to China in 1971, he did more than end nearly a quarter-century of estrangement between Washington and Beijing. He also managed the diplomatic coup of splitting America\'s foremost enemies, China and the Soviet Union, and thereby vaulting the U.S. from a position of strategic overstretch to one of strategic advantage. Now that America is facing renewed hostility with Moscow and Beijing, the Donald Trump administration has reportedly been thinking about trying to repeat the performance, this time by conciliating Russia in hopes of turning it against an increasingly formidable China. It\'s a neat idea for a superpower under strain, but it probably won\'t work until things get both much better and much worse.';
+
+const THIRD_STORY_ONE = 'Twin wildfires tearing through vineyards and brushy hills threatened some 10,000 homes Tuesday in Northern California — yet another front in the battle against the flames that have ravaged some of the state\'s most scenic areas.';
+const THIRD_STORY_ONE_ENTITY = 'The evacuated residents of Lakeport anxiously watch and wait. The town has been spared, so far, but the threat of fire and destruction remain. Lakeport is center stage in this incendiary drama. The entire town with a population of about 5000 was evacuated Sunday because flames were moving toward the community. The raging fire that threatened the town Sunday night has diminished considerably. Mike Von Rosenberg evacuated from Lakeport. He’s at the Lower Lake high school shelter. \“Looks a lot better…looks like they’re getting a big time handle on it and everything,\” said Von Rosenberg. \“God bless those guys…maybe they\’ll get a few medals.\”';
+
+// Code for the handlers here
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         const attributesManager = handlerInput.attributesManager;
         const responseBuilder = handlerInput.responseBuilder;
 
@@ -43,6 +60,7 @@ const StartIntentHandler = {
         const sessionAttributes = attributesManager.getSessionAttributes();
 
         sessionAttributes.prevIntent = 'StartIntent';
+        attributesManager.setPersistentAttributes(sessionAttributes);
 
         const speechText = 'In the news today we have: Trump, Russian Secret Spilling Site and California Wildfires. What would you like to know more about?';
 
@@ -60,9 +78,16 @@ const SelectIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'SelectIntent';
     },
     handle(handlerInput) {
-        const newsTitle = handlerInput.requestEnvelope.request.intent.slots.newsTitle;
+        const request = handlerInput.requestEnvelope.request;
+        const attributesManager = handlerInput.attributesManager;
+        const responseBuilder = handlerInput.responseBuilder;
+        const sessionAttributes = attributesManager.getSessionAttributes();
+
+        const newsTitle = request.intent.slots.newsTitle;
         const newsTitleValue = newsTitle.value;
-        // newsTitleValue are news titles
+
+
+
         const speechText = 'In the news today we have: Trump, Russian Secret Spilling Site and California Wildfires. What would you like to know more about?';
 
         return handlerInput.responseBuilder
@@ -173,6 +198,6 @@ exports.handler = Alexa.SkillBuilders.custom()
         SessionEndedRequestHandler
     )
     .addErrorHandlers(ErrorHandler)
-    .withTableName('Interactive-News')
+    .withTableName('interact')
     .withAutoCreateTable(true)
     .lambda();
