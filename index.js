@@ -148,6 +148,62 @@ const SelectIntentHandler = {
     }
 };
 
+const RepeatIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'RepeatIntent';
+    },
+    handle(handlerInput) {
+        const attributesManager = handlerInput.attributesManager;
+        const responseBuilder = handlerInput.responseBuilder;
+        const sessionAttributes = attributesManager.getSessionAttributes();
+
+        let prevIntent = sessionAttributes.prevIntent;
+        let prevSlotName = sessionAttributes.prevSlotName;
+        let prevValue = sessionAttributes.prevSlotValue;
+
+        let responseText = '';
+
+        if (prevIntent === 'SelectIntent') {
+            if (TITLE_ONE.indexOf(prevValue) !== -1) {
+                if (sessionAttributes.story1Pos === 1) {
+                    responseText = 'The first story about trump is. ' + FIRST_STORY_ONE + '. Say next to hear the next story about Trump?';
+                } else if (sessionAttributes.story1Pos === 2) {
+                    responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump?';
+                    sessionAttributes.story1Pos = 3;
+                } else if ((sessionAttributes.story1Pos === 3)) {
+                    responseText = 'The final story about trump is. ' + FIRST_STORY_THREE + '. What more would you like to hear about?';
+                    sessionAttributes.story1Pos = 4;
+                } else {
+                    responseText = 'There are no stories left about Donald Trump. What more would you like to hear about?';
+                }
+            } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
+                if (sessionAttributes.story2Pos === 1) {
+                    responseText = SECOND_STORY_ONE;
+                } else {
+                    responseText = 'There are no stories left about Russia. What more would you like to hear about?';
+                }
+            } else if (TITLE_THREE.indexOf(prevValue) !== -1) {
+                if (sessionAttributes.story3Pos === 1) {
+                    responseText = THIRD_STORY_ONE;
+                } else {
+                    responseText = 'There are no stories left about Wildfires in California. What more would you like to hear about?';
+                }
+            }
+        }
+
+        if (responseText === '') {
+            responseText = 'There is nothing to repeat. What would you like to hear about?';
+        }
+
+        return responseBuilder
+            .speak(responseText)
+            .reprompt("What would you like to know more about?")
+            .withSimpleCard('News Feed', responseText)
+            .getResponse();
+    }
+};
+
 const PreviousIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -185,7 +241,7 @@ const PreviousIntentHandler = {
 
         return responseBuilder
             .speak(responseText)
-            .reprompt("What would you like to know more about")
+            .reprompt("What would you like to know more about?")
             .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
@@ -224,7 +280,7 @@ const NextIntentHandler = {
 
         return responseBuilder
             .speak(responseText)
-            .reprompt("What would you like to know more about")
+            .reprompt("What would you like to know more about?")
             .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
@@ -247,6 +303,7 @@ const ElaborateIntentHandler = {
         const newsEntityValue = newsEntity.value;
 
         if (ENTITY_ONE_ONE.indexOf(newsEntityValue) !== -1) {
+            responseText = '';
             if (sessionAttributes.story1Pos === 2) {
                 responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump';
                 sessionAttributes.story1Pos = 3;
