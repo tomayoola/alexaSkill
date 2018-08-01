@@ -166,25 +166,21 @@ const RepeatIntentHandler = {
 
         if (prevIntent === 'SelectIntent') {
             if (TITLE_ONE.indexOf(prevValue) !== -1) {
-                if (sessionAttributes.story1Pos === 1) {
+                if (sessionAttributes.story1Pos === 2) {
                     responseText = 'The first story about trump is. ' + FIRST_STORY_ONE + '. Say next to hear the next story about Trump?';
-                } else if (sessionAttributes.story1Pos === 2) {
+                } else if (sessionAttributes.story1Pos === 3) {
                     responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump?';
-                    sessionAttributes.story1Pos = 3;
-                } else if ((sessionAttributes.story1Pos === 3)) {
+                } else if ((sessionAttributes.story1Pos === 4)) {
                     responseText = 'The final story about trump is. ' + FIRST_STORY_THREE + '. What more would you like to hear about?';
-                    sessionAttributes.story1Pos = 4;
-                } else {
-                    responseText = 'There are no stories left about Donald Trump. What more would you like to hear about?';
                 }
             } else if (TITLE_TWO.indexOf(prevValue) !== -1) {
-                if (sessionAttributes.story2Pos === 1) {
+                if (sessionAttributes.story2Pos === 2) {
                     responseText = SECOND_STORY_ONE;
                 } else {
                     responseText = 'There are no stories left about Russia. What more would you like to hear about?';
                 }
             } else if (TITLE_THREE.indexOf(prevValue) !== -1) {
-                if (sessionAttributes.story3Pos === 1) {
+                if (sessionAttributes.story3Pos === 2) {
                     responseText = THIRD_STORY_ONE;
                 } else {
                     responseText = 'There are no stories left about Wildfires in California. What more would you like to hear about?';
@@ -241,7 +237,7 @@ const PreviousIntentHandler = {
 
         return responseBuilder
             .speak(responseText)
-            .reprompt("What would you like to know more about?")
+            .reprompt("What would you like to know more about")
             .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
@@ -280,7 +276,7 @@ const NextIntentHandler = {
 
         return responseBuilder
             .speak(responseText)
-            .reprompt("What would you like to know more about?")
+            .reprompt("What would you like to know more about")
             .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
