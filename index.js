@@ -11,11 +11,11 @@ const TITLE_ONE = ['Trump', 'Donald Trump', 'trump', 'donald trump'];
 const TITLE_TWO = ['Russian secret-spilling site', 'Russian secret spilling site', 'Russian secret spill site', 'russia', 'Russia'];
 const TITLE_THREE = ['Wildfires California', 'Wildfire California', 'Wildfire in California', 'Wildfires in California', 'wildfire', 'california', 'wildfires'];
 
-const ENTITY_ONE_ONE = ['National Rifle Association', 'Nation Rifle Association', 'National Rifle Associate'];
+const ENTITY_ONE_ONE = ['National Rifle Association', 'Nation Rifle Association', 'National Rifle Associate', 'national rifle association', 'nation rifle association', 'national rifle associate'];
 const ENTITY_ONE_TWO = ['President Hassan Rouhani', 'Hassan Rouhani'];
-const ENTITY_ONE_THREE = ['Koch Brothers', 'Koch Brother'];
-const ENTITY_TWO_ONE = ['Russia'];
-const ENTITY_THREE_ONE = ['Lakeport', 'Lake port'];
+const ENTITY_ONE_THREE = ['Koch Brothers', 'Koch Brother', 'koch brothers', 'koch brother'];
+const ENTITY_TWO_ONE = ['Russia', 'russia'];
+const ENTITY_THREE_ONE = ['Lakeport', 'Lake port', 'lakeport', 'lake port'];
 
 
 const FIRST_STORY_ONE = 'President Donald Trump tweeted on Tuesday he is consulting with the National Rifle Association over whether it makes sense for a Texas company to publish downloadable blueprints for a 3D-printed gun. Trump spoke after eight states filed suit against the administration, contending the hard-to-trace plastic weapons that fire real bullets are a boon to terrorists and criminals and threaten public safety. The suit, filed Monday in Seattle, asks a judge to block the federal government’s late-June settlement with Defense Distributed, which allowed the company to make the plans available online.';
@@ -293,34 +293,29 @@ const ElaborateIntentHandler = {
         const responseBuilder = handlerInput.responseBuilder;
         const sessionAttributes = attributesManager.getSessionAttributes();
 
-        const responseText = '';
+        let responseText = '';
+        const followUpText = 'Say Repeat to repeat the main article or Next to go to the next article about' + sessionAttributes.prevSlotValue;
 
         const newsEntity = request.intent.slots.newsEntities;
         const newsEntityValue = newsEntity.value;
 
         if (ENTITY_ONE_ONE.indexOf(newsEntityValue) !== -1) {
-            responseText = '';
-            if (sessionAttributes.story1Pos === 2) {
-                responseText = 'The second story about trump is. ' + FIRST_STORY_TWO + '. Say next to hear the final story about Trump';
-                sessionAttributes.story1Pos = 3;
-            } else if ((sessionAttributes.story1Pos === 3)) {
-                responseText = 'The final story about trump is. ' + FIRST_STORY_THREE + '. What more would you like to hear about';
-                sessionAttributes.story1Pos = 4;
-            } else {
-                responseText = 'There are no stories left about Donald Trump. What more would you like to hear about';
-            }
+            responseText = FIRST_STORY_ONE_ENTITY;
         } else if (ENTITY_ONE_TWO.indexOf(newsEntityValue) !== -1) {
-            responseText = 'There are no stories left about Russia. What more would you like to hear about.';
+            responseText = FIRST_STORY_TWO_ENTITY;
         } else if (ENTITY_ONE_THREE.indexOf(newsEntityValue) !== -1) {
-            responseText = 'There are no stories left about Wildfires in California. What more would you like to hear about.';
+            responseText = FIRST_STORY_THREE_ENTITY;
         } else if (ENTITY_TWO_ONE.indexOf(newsEntityValue) !== -1) {
-
+            responseText = SECOND_STORY_ONE_ENTITY;
         } else if (ENTITY_THREE_ONE.indexOf(newsEntityValue) !== -1) {
-
+            responseText = THIRD_STORY_ONE_ENTITY;
         }
+
+        responseText = responseText + followUpText;
 
         return responseBuilder
             .speak(responseText)
+            .reprompt("What would you like to know more about")
             .withSimpleCard('News Feed', responseText)
             .getResponse();
     }
@@ -389,6 +384,7 @@ exports.handler = Alexa.SkillBuilders.standard()
     .addRequestHandlers(LaunchRequestHandler,
         StartIntentHandler,
         SelectIntentHandler,
+        RepeatIntentHandler,
         PreviousIntentHandler,
         NextIntentHandler,
         ElaborateIntentHandler,
