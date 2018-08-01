@@ -11,6 +11,13 @@ const TITLE_ONE = ['Trump', 'Donald Trump', 'trump', 'donald trump'];
 const TITLE_TWO = ['Russian secret-spilling site', 'Russian secret spilling site', 'Russian secret spill site', 'russia', 'Russia'];
 const TITLE_THREE = ['Wildfires California', 'Wildfire California', 'Wildfire in California', 'Wildfires in California', 'wildfire', 'california', 'wildfires'];
 
+const ENTITY_ONE_ONE = ['National Rifle Association', 'Nation Rifle Association', 'National Rifle Associate'];
+const ENTITY_ONE_TWO = ['President Hassan Rouhani', 'Hassan Rouhani'];
+const ENTITY_ONE_THREE = ['Koch Brothers', 'Koch Brother'];
+const ENTITY_TWO_ONE = ['Russia'];
+const ENTITY_THREE_ONE = ['Lakeport', 'Lake port'];
+
+
 const FIRST_STORY_ONE = 'President Donald Trump tweeted on Tuesday he is consulting with the National Rifle Association over whether it makes sense for a Texas company to publish downloadable blueprints for a 3D-printed gun. Trump spoke after eight states filed suit against the administration, contending the hard-to-trace plastic weapons that fire real bullets are a boon to terrorists and criminals and threaten public safety. The suit, filed Monday in Seattle, asks a judge to block the federal government’s late-June settlement with Defense Distributed, which allowed the company to make the plans available online.';
 const FIRST_STORY_TWO = 'Mr Trump said he could meet President Hassan Rouhani with "no preconditions" at "any time", after the two traded hostile threats earlier this month. Iranian state media quoted politicians as saying such talks would have "no value" and be "a humiliation". In May, the US abandoned a deal which curbed Iran\'s nuclear activities in return for the lifting of sanctions. The US is deeply suspicious of Iranian activity in the Middle East and is an ally of Israel and Saudi Arabia, two of Iran\s foes.';
 const FIRST_STORY_THREE = 'Donald Trump has launched an extraordinary attack on the Koch brothers, accusing the Republican megadonors of opposing his government\'s agenda. \"The globalist Koch Brothers, who have become a total joke in real Republican circles, are against Strong Borders and Powerful Trade,\" the US president wrote on Twitter early on Tuesday morning. Mr Trump\'s outburst came after the Koch brothers\' political arm declared it would not help elect a Republican senate candidate in North Dakota, partly over his failure to challenge the White House\'s trade tariffs. The decision sent a strong message to Republican officials across the country unwilling to oppose the spending explosion and protectionist trade policies embraced by Mr Trump.';
@@ -20,7 +27,6 @@ const FIRST_STORY_THREE_ENTITY = 'Steve Bannon has a warning for candidates supp
 
 const SECOND_STORY_ONE = 'Over the past three months, a handful of highly placed Russians have discovered their secrets seeping onto the web. It happened to a Russian Interior Ministry official whose emails were published online in April. It happened again this month, when details about a former Kremlin chief of staff\'s American energy investment were exposed by Britain\'s Guardian newspaper.';
 const SECOND_STORY_ONE_ENTITY = 'Trump Can\'t Split Russia From China Yet When Henry Kissinger traveled to China in 1971, he did more than end nearly a quarter-century of estrangement between Washington and Beijing. He also managed the diplomatic coup of splitting America\'s foremost enemies, China and the Soviet Union, and thereby vaulting the U.S. from a position of strategic overstretch to one of strategic advantage. Now that America is facing renewed hostility with Moscow and Beijing, the Donald Trump administration has reportedly been thinking about trying to repeat the performance, this time by conciliating Russia in hopes of turning it against an increasingly formidable China. It\'s a neat idea for a superpower under strain, but it probably won\'t work until things get both much better and much worse.';
-
 const THIRD_STORY_ONE = 'Twin wildfires tearing through vineyards and brushy hills threatened some 10,000 homes Tuesday in Northern California — yet another front in the battle against the flames that have ravaged some of the state\'s most scenic areas.';
 const THIRD_STORY_ONE_ENTITY = 'The evacuated residents of Lakeport anxiously watch and wait. The town has been spared, so far, but the threat of fire and destruction remain. Lakeport is center stage in this incendiary drama. The entire town with a population of about 5000 was evacuated Sunday because flames were moving toward the community. The raging fire that threatened the town Sunday night has diminished considerably. Mike Von Rosenberg evacuated from Lakeport. He’s at the Lower Lake high school shelter. \"Looks a lot better…looks like they’re getting a big time handle on it and everything,\" said Von Rosenberg. \"God bless those guys…maybe they\'ll get a few medals.\"';
 
@@ -192,6 +198,21 @@ const NextIntentHandler = {
             .speak(responseText)
             .reprompt("What would you like to know more about")
             .withSimpleCard('Hello World', "hello")
+            .getResponse();
+    }
+};
+
+const ElaborateIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'ElaborateIntent';
+    },
+    handle(handlerInput) {
+        const speechText = 'Hello World!';
+
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .withSimpleCard('Hello World', speechText)
             .getResponse();
     }
 };
