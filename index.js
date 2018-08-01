@@ -7,15 +7,15 @@ aws.config.update({
     region: 'us-east-1'
 });
 
-const TITLE_ONE = ['Trump', 'Donald Trump', 'trump', 'donald trump'];
-const TITLE_TWO = ['Russian secret-spilling site', 'Russian secret spilling site', 'Russian secret spill site', 'russia', 'Russia'];
-const TITLE_THREE = ['Wildfires California', 'Wildfire California', 'Wildfire in California', 'Wildfires in California', 'wildfire', 'california', 'wildfires'];
+const TITLE_ONE = ['trump', 'donald trump'];
+const TITLE_TWO = ['russian secret-spilling site', 'russian secret spilling site', 'russian secret spill site', 'russia'];
+const TITLE_THREE = ['wildfires california', 'wildfire california', 'wildfire in california', 'wildfires in california', 'wildfire', 'california', 'wildfires'];
 
-const ENTITY_ONE_ONE = ['National Rifle Association', 'Nation Rifle Association', 'National Rifle Associate', 'national rifle association', 'nation rifle association', 'national rifle associate'];
-const ENTITY_ONE_TWO = ['President Hassan Rouhani', 'Hassan Rouhani'];
-const ENTITY_ONE_THREE = ['Koch Brothers', 'Koch Brother', 'koch brothers', 'koch brother'];
-const ENTITY_TWO_ONE = ['Russia', 'russia'];
-const ENTITY_THREE_ONE = ['Lakeport', 'Lake port', 'lakeport', 'lake port'];
+const ENTITY_ONE_ONE = ['national rifle association', 'nation rifle association', 'national rifle associate'];
+const ENTITY_ONE_TWO = ['president hassan rouhani', 'hassan rouhani'];
+const ENTITY_ONE_THREE = ['koch brothers', 'koch brother'];
+const ENTITY_TWO_ONE = ['russia'];
+const ENTITY_THREE_ONE = ['lakeport', 'lake port'];
 
 
 const FIRST_STORY_ONE = 'President Donald Trump tweeted on Tuesday he is consulting with the National Rifle Association over whether it makes sense for a Texas company to publish downloadable blueprints for a 3D-printed gun. Trump spoke after eight states filed suit against the administration, contending the hard-to-trace plastic weapons that fire real bullets are a boon to terrorists and criminals and threaten public safety. The suit, filed Monday in Seattle, asks a judge to block the federal government’s late-June settlement with Defense Distributed, which allowed the company to make the plans available online.';
@@ -100,7 +100,7 @@ const SelectIntentHandler = {
         let prevValue = sessionAttributes.prevSlotValue;
 
         const newsTitle = request.intent.slots.newsTitle;
-        const newsTitleValue = newsTitle.value;
+        const newsTitleValue = newsTitle.value.toLowerCase();
 
         sessionAttributes.prevIntent = 'SelectIntent';
         sessionAttributes.prevSlotName = newsTitle;
@@ -160,7 +160,7 @@ const RepeatIntentHandler = {
 
         let prevIntent = sessionAttributes.prevIntent;
         let prevSlotName = sessionAttributes.prevSlotName;
-        let prevValue = sessionAttributes.prevSlotValue;
+        let prevValue = sessionAttributes.prevSlotValue.toLowerCase();
 
         let responseText = '';
 
@@ -212,7 +212,7 @@ const PreviousIntentHandler = {
 
         let responseText = '';
 
-        let prevValue = sessionAttributes.prevSlotValue;
+        let prevValue = sessionAttributes.prevSlotValue.toLowerCase();
 
         if (TITLE_ONE.indexOf(prevValue) !== -1) {
             if (sessionAttributes.story1Pos === 2) {
@@ -255,7 +255,7 @@ const NextIntentHandler = {
 
         let responseText = '';
 
-        let prevValue = sessionAttributes.prevSlotValue;
+        let prevValue = sessionAttributes.prevSlotValue.toLowerCase();
 
         if (TITLE_ONE.indexOf(prevValue) !== -1) {
             if (sessionAttributes.story1Pos === 2) {
@@ -294,10 +294,10 @@ const ElaborateIntentHandler = {
         const sessionAttributes = attributesManager.getSessionAttributes();
 
         let responseText = '';
-        const followUpText = 'Say Repeat to repeat the main article or Next to go to the next article about' + sessionAttributes.prevSlotValue;
+        const followUpText = 'Say Repeat to repeat the main article or Next to go to the next article about ' + sessionAttributes.prevSlotValue;
 
         const newsEntity = request.intent.slots.newsEntities;
-        const newsEntityValue = newsEntity.value;
+        const newsEntityValue = newsEntity.value.toLowerCase();
 
         if (ENTITY_ONE_ONE.indexOf(newsEntityValue) !== -1) {
             responseText = FIRST_STORY_ONE_ENTITY;
